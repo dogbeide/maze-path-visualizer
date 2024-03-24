@@ -14,14 +14,17 @@ function MazeGrid() {
   ];
 
   return (
-    <div>
-      {maze.map((row, rowIdx) => (
-        <div key={rowIdx} className='row'>
-          {row.map((cell, cellIdx) => (
-            <div key={cellIdx} className={`cell ${cell}`}></div>
-          ))}
-        </div>
-      ))}
+    <div className='maze-container'>
+      <button className='button'>Refresh Maze</button>
+      <div className='maze'>
+        {maze.map((row, rowIdx) => (
+          <div key={rowIdx} className='row'>
+            {row.map((cell, cellIdx) => (
+              <div key={cellIdx} className={`cell ${cell}`}></div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
