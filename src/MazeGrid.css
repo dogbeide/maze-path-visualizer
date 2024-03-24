@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  border: 1px solid white;
+}
+
+.cell.wall {
+  background-color: black;
+}
+
+.cell.start {
+  background-color: green;
+}
+
+.cell.path {
+  background-color: white;
+}
+
+.cell.end {
+  background-color: red;
+}
+
+.cell.visited {
+  background-color: blueviolet;
+}
