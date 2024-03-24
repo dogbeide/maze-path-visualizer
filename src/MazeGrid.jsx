@@ -1,21 +1,44 @@
+import { useState } from 'react';
 import './MazeGrid.css'
-
-const WALL = 'wall';
-const PATH = 'path';
-const START = 'start';
-const END = 'end';
+import { useEffect } from 'react';
 
 function MazeGrid() {
-  let maze = [
-    [WALL, WALL, START, PATH, WALL, WALL, WALL],
-    [WALL, WALL, WALL, PATH, PATH, PATH, WALL],
-    [WALL, WALL, PATH, PATH, WALL, PATH, WALL],
-    [WALL, WALL, WALL, WALL, WALL, END, WALL],
-  ];
+  const [maze, setMaze] = useState([]);
+  
+  useEffect(() => {
+    genMaze(7, 7);
+  }, [])
+
+  const genMaze = (rows, cols) => {
+    let newMaze = [];
+
+    for (let i = 0; i < rows; i++) {
+      let row = [];
+
+      for (let j = 0; j < cols; j++) {
+        let cell = Math.floor(Math.random()*2);
+        switch(cell) {
+          case 0:
+            row.push('wall');
+            break;
+          case 1:
+            row.push('path');
+            break;
+          default:
+            break;
+        }
+      }
+      newMaze.push(row);
+    }
+
+    newMaze[1][0] = 'start';
+    newMaze[rows-2][cols-1] = 'end';
+    setMaze(newMaze);
+  }
 
   return (
     <div className='maze-container'>
-      <button className='button'>Refresh Maze</button>
+      <button className='button' onClick={() => genMaze(7, 7)}>Refresh Maze</button>
       <div className='maze'>
         {maze.map((row, rowIdx) => (
           <div key={rowIdx} className='row'>
