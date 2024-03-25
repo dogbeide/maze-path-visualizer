@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 function MazeGrid() {
   const [maze, setMaze] = useState([]);
+
   const width = 11;
   const height = 11;
   
@@ -25,9 +26,6 @@ function MazeGrid() {
     const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 
     const isCellValid = (x, y) => {
-      // const isValid = x >= 0 && y >= 0 && x < cols && y < rows && matrix[y][x] == 'wall';
-      // console.log(`${x},${y} = ${isValid}`);
-      // return isValid;
       return x >= 0 && y >= 0 && x < cols && y < rows && matrix[y][x] == 'wall';
     }
 
@@ -54,6 +52,16 @@ function MazeGrid() {
     setMaze(matrix);
   }
 
+  const updateMaze = (y, x) => {
+    setMaze((prevMaze) => {
+      return prevMaze.map((row, rowIdx) =>
+        row.map((cell, cellIdx) => {
+          return rowIdx == y && cellIdx == x ? 'visited' : cell;
+        })
+      )
+    });
+  }
+
   const bfs = (start) => {
     const queue = [start];
     const visited = new Set(`${start[0]},${start[1]}`);
@@ -63,6 +71,8 @@ function MazeGrid() {
         console.log(`found path to end ${x},${y}`);
         return true;
       }
+
+      updateMaze(y, x);
       return false;
     }
 
@@ -107,6 +117,8 @@ function MazeGrid() {
         console.log(`found path to end ${x},${y}`);
         return true;
       }
+
+      updateMaze(y, x);
       return false;
     }
 
