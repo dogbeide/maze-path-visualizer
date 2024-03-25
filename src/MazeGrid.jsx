@@ -11,92 +11,6 @@ function MazeGrid() {
     genMaze(width, height);
   }, [])
 
-  const bfs = (start) => {
-    const queue = [start];
-    const visited = new Set(`${start[0]},${start[1]}`);
-
-    const visit = ([x, y]) => {
-      if (maze[y, x] == 'path') {
-        console.log(`found path to end ${x},${y}`);
-        return true;
-      }
-      return false;
-    }
-
-    const step = () => {
-      if (queue.length === 0) {
-        return;
-      }
-
-      const [x, y] = queue.shift();
-      console.log('step');
-      const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-
-      for (const [dx, dy] of dirs) {
-        const nx = x + dx;
-        const ny = y + dy;
-
-        if (nx >= 0 && nx < width && ny >= 0 && ny < height && !visited.has(`${nx},${ny}`)) {
-          visited.add(`${nx},${ny}`);
-
-          if (maze[ny][nx] == 'path' || maze[ny][nx] == 'end') {
-            if(visit(nx, ny)) {
-              return true;
-            }
-            queue.push([nx, ny]);
-          }
-        }
-      }
-    }
-
-    step();
-    return false;
-  }
-
-  const dfs = (start) => {
-    const stack = [start];
-    const visited = new Set(`${start[0]},${start[1]}`);
-
-    const visit = ([x, y]) => {
-      console.log(`visiting ${x},${y}`);
-
-      if (maze[y, x] == 'path') {
-        console.log(`found path to end ${x},${y}`);
-        return true;
-      }
-      return false;
-    }
-
-    const step = () => {
-      if (stack.length === 0) {
-        return;
-      }
-
-      const [x, y] = stack.pop();
-      console.log('step');
-      const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-
-      for (const [dx, dy] of dirs) {
-        const nx = x + dx;
-        const ny = y + dy;
-
-        if (nx >= 0 && nx < width && ny >= 0 && ny < height && !visited.has(`${nx},${ny}`)) {
-          visited.add(`${nx},${ny}`);
-
-          if (maze[ny][nx] == 'path' || maze[ny][nx] == 'end') {
-            if(visit(nx, ny)) {
-              return true;
-            }
-            queue.push([nx, ny]);
-          }
-        }
-      }
-    }
-    
-    step();
-    return false;
-  }
-
   const genMaze = (rows, cols) => {
     let matrix = [];
 
@@ -140,9 +54,101 @@ function MazeGrid() {
     setMaze(matrix);
   }
 
+  const bfs = (start) => {
+    const queue = [start];
+    const visited = new Set(`${start[0]},${start[1]}`);
+
+    const visit = ([x, y]) => {
+      if (maze[y][x] == 'end') {
+        console.log(`found path to end ${x},${y}`);
+        return true;
+      }
+      return false;
+    }
+
+    const step = () => {
+      if (queue.length === 0) {
+        return false;
+      }
+
+      const [x, y] = queue.shift();
+      const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+
+      for (const [dx, dy] of dirs) {
+        const nx = x + dx;
+        const ny = y + dy;
+
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height && !visited.has(`${nx},${ny}`)) {
+          visited.add(`${nx},${ny}`);
+
+          if (maze[ny][nx] == 'path' || maze[ny][nx] == 'end') {
+            console.log(`is path or end (${nx},${ny})`);
+
+            if(visit([nx, ny])) {
+              return true;
+            }
+            queue.push([nx, ny]);
+          }
+        }
+      }
+    }
+
+    while (queue.length > 0) {
+      step();
+    }
+  }
+
+  const dfs = (start) => {
+    const stack = [start];
+    const visited = new Set(`${start[0]},${start[1]}`);
+
+    const visit = ([x, y]) => {
+      if (maze[y][x] == 'end') {
+        console.log(`found path to end ${x},${y}`);
+        return true;
+      }
+      return false;
+    }
+
+    const step = () => {
+      if (stack.length === 0) {
+        return false;
+      }
+
+      const [x, y] = stack.pop();
+      console.log('step');
+      const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+
+      for (const [dx, dy] of dirs) {
+        const nx = x + dx;
+        const ny = y + dy;
+
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height && !visited.has(`${nx},${ny}`)) {
+          visited.add(`${nx},${ny}`);
+
+          if (maze[ny][nx] == 'path' || maze[ny][nx] == 'end') {
+            console.log(`is path or end (${nx},${ny})`);
+
+            if(visit([nx, ny])) {
+              return true;
+            }
+            stack.push([nx, ny]);
+          }
+          step();
+        }
+      }
+    }
+
+    return step();
+  }
+
   return (
     <div className='maze-container'>
-      <button className='button' onClick={() => genMaze(width, height)}>Refresh Maze</button>
+      <div className='buttons-container'>
+        <button className='button' onClick={() => genMaze(width, height)}>Refresh Maze</button>
+        <button className='button' onClick={() => bfs([0, 1])}>Run BFS</button>
+        <button className='button' onClick={() => dfs([0, 1])}>Run DFS</button>
+      </div>
       <div className='maze'>
         {maze.map((row, rowIdx) => (
           <div key={rowIdx} className='row'>
