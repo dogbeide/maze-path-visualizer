@@ -93,7 +93,7 @@ function MazeGrid() {
 
           if (maze[ny][nx] == 'path' || maze[ny][nx] == 'end') {
             console.log(`is path or end (${nx},${ny})`);
-
+            
             if(visit([nx, ny])) {
               return true;
             }
@@ -101,11 +101,11 @@ function MazeGrid() {
           }
         }
       }
+
+      setTimeout(step, 123);
     }
 
-    while (queue.length > 0) {
-      step();
-    }
+    return step();
   }
 
   const dfs = (start) => {
@@ -146,9 +146,11 @@ function MazeGrid() {
             }
             stack.push([nx, ny]);
           }
-          step();
+          
         }
       }
+
+      setTimeout(step, 123);
     }
 
     return step();
