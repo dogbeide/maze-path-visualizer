@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 function MazeGrid() {
   const [maze, setMaze] = useState([]);
   const [timeoutIds, setTimeoutIds] = useState([]);
+  const [complete, setComplete] = useState(false);
 
   const width = 21;
   const height = 21;
@@ -97,6 +98,7 @@ function MazeGrid() {
             console.log(`is path or end (${nx},${ny})`);
             
             if(visit([nx, ny])) {
+              setComplete(true);
               return true;
             }
             queue.push([nx, ny]);
@@ -144,6 +146,7 @@ function MazeGrid() {
             console.log(`is path or end (${nx},${ny})`);
 
             if(visit([nx, ny])) {
+              setComplete(true);
               return true;
             }
             stack.push([nx, ny]);
@@ -162,6 +165,7 @@ function MazeGrid() {
   const refreshMaze = () => {
     timeoutIds.forEach(clearTimeout); // timeoutId => clearTimeout(timeoutIdW)
     setTimeoutIds([]);
+    setComplete(false);
     genMaze(width, height);
   }
 
@@ -176,7 +180,7 @@ function MazeGrid() {
         {maze.map((row, rowIdx) => (
           <div key={rowIdx} className='row'>
             {row.map((cell, cellIdx) => (
-              <div key={cellIdx} className={`cell ${cell}`}></div>
+              <div key={cellIdx} className={`cell ${cell == 'visited' && complete ? 'visited-complete' : cell}`}></div>
             ))}
           </div>
         ))}

@@ -59,3 +59,7 @@
 .cell.visited {
   background-color: blueviolet;
 }
+
+.cell.visited-complete {
+  background-color: rgb(0, 110, 255);
+}
