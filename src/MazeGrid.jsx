@@ -6,8 +6,9 @@ function MazeGrid() {
   const [maze, setMaze] = useState([]);
   const [timeoutIds, setTimeoutIds] = useState([]);
 
-  const width = 11;
-  const height = 11;
+  const width = 21;
+  const height = 21;
+  const delay = 100;
   
   useEffect(() => {
     genMaze(width, height);
@@ -103,7 +104,7 @@ function MazeGrid() {
         }
       }
 
-      const timeoutId = setTimeout(step, 123);
+      const timeoutId = setTimeout(step, delay);
       setTimeoutIds(prevTimeoutIds => [...prevTimeoutIds, timeoutId]);
     }
 
@@ -151,7 +152,7 @@ function MazeGrid() {
         }
       }
 
-      const timeoutId = setTimeout(step, 123);
+      const timeoutId = setTimeout(step, delay);
       setTimeoutIds(prevTimeoutIds => [...prevTimeoutIds, timeoutId]);
     }
 
