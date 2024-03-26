@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 function MazeGrid() {
   const [maze, setMaze] = useState([]);
+  const [timeoutIds, setTimeoutIds] = useState([]);
 
   const width = 11;
   const height = 11;
@@ -102,7 +103,8 @@ function MazeGrid() {
         }
       }
 
-      setTimeout(step, 123);
+      const timeoutId = setTimeout(step, 123);
+      setTimeoutIds(prevTimeoutIds => [...prevTimeoutIds, timeoutId]);
     }
 
     return step();
@@ -128,7 +130,6 @@ function MazeGrid() {
       }
 
       const [x, y] = stack.pop();
-      console.log('step');
       const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 
       for (const [dx, dy] of dirs) {
@@ -150,16 +151,23 @@ function MazeGrid() {
         }
       }
 
-      setTimeout(step, 123);
+      const timeoutId = setTimeout(step, 123);
+      setTimeoutIds(prevTimeoutIds => [...prevTimeoutIds, timeoutId]);
     }
 
     return step();
   }
 
+  const refreshMaze = () => {
+    timeoutIds.forEach(clearTimeout); // timeoutId => clearTimeout(timeoutIdW)
+    setTimeoutIds([]);
+    genMaze(width, height);
+  }
+
   return (
     <div className='maze-container'>
       <div className='buttons-container'>
-        <button className='button' onClick={() => genMaze(width, height)}>Refresh Maze</button>
+        <button className='button' onClick={() => refreshMaze()}>Refresh Maze</button>
         <button className='button' onClick={() => bfs([0, 1])}>Run BFS</button>
         <button className='button' onClick={() => dfs([0, 1])}>Run DFS</button>
       </div>
